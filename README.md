@@ -1,4 +1,4 @@
-# Konthe
+# Konthe.jl
 
 Collection of convenience function for plotting using the OpenGL package.
 
