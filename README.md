@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/meggart/glPlot.jl.png)](https://travis-ci.org/meggart/glPlot.jl)
 
+Have a look at an exammple notebook:
+
+[Example notebook](https://rawgithub.com/meggart/Konthe/master/examples/KontheExamples.html)
+
 Collection of convenience function for plotting using the OpenGL package. Here is a list of exported functions:
 
     newPlot3D(width=800, height=600)
@@ -49,10 +53,6 @@ disbales lighting.
 sets the direction of the light source. 
 
 Examples:
-
-See example notebook:
-
-[Example](https://github.com/meggart/Konthe/blob/master/examples/KontheExamples.html)
 
 ![Fig1](https://github.com/meggart/Konthe/blob/master/examples/fig1.png?raw=true)
 
