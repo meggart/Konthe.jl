@@ -50,12 +50,12 @@ sets the direction of the light source.
 
 Examples:
 
-![Fig1](https://github.com/meggart/Konthe/examples/fig1.png)
+![Fig1](https://github.com/meggart/Konthe/blob/master/examples/fig1.png?raw=true)
 
-![Fig2](https://github.com/meggart/Konthe/examples/fig2.png)
+![Fig2](https://github.com/meggart/Konthe/blob/master/examples/fig2.png?raw=true)
 
-![Fig3](https://github.com/meggart/Konthe/examples/fig3.png)
+![Fig3](https://github.com/meggart/Konthe/blob/master/examples/fig3.png?raw=true)
 
-![Fig4](https://github.com/meggart/Konthe/examples/fig4.png)
+![Fig4](https://github.com/meggart/Konthe/blob/master/examples/fig4.png?raw=true)
 
-![Fig5](https://github.com/meggart/Konthe/examples/fig5.png)
+![Fig5](https://github.com/meggart/Konthe/blob/master/examples/fig5.png?raw=true)
