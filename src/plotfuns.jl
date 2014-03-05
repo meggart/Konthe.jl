@@ -47,6 +47,8 @@ function surf3D{T<:Number}(s::Matrix{T};
 	x::Vector{T}=linspace(0,1,size(s,1)),y::Vector{T}=linspace(0,1,size(s,2)),
 	filled::Bool=true,
 	color=zvalcol,normals=nnMeanNormal,lw=2)
+	size(s,1)==length(x) ? nothing : error("Length of x array must match first matrix dimension")
+	size(s,2)==length(y) ? nothing : error("Length of y array must match first matrix dimension")
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
 	push!(predef,:(glLineWidth($lw)))
 	push!(quadsList,VertexContainer((s,x,y),normals,color,1,1,predef))
@@ -74,9 +76,9 @@ end
 export sphere3D
 
 function coordSys3D(xlim,ylim,zlim)
-	lines3D([xlim[1],xlim[end]],[    0.0,      0.0],[    0.0,      0.0],color=[RGB(1.0,0.0,0.0)])
-	lines3D([    0.0,      0.0],[ylim[1],ylim[end]],[    0.0,      0.0],color=[RGB(0.0,1.0,0.0)])
-	lines3D([    0.0,      0.0],[    0.0,      0.0],[zlim[1],zlim[end]],color=[RGB(0.0,0.0,1.0)])
+	lines3D([xlim[1],xlim[end]],[    0.0,      0.0],[    0.0,      0.0],color=[RGB(1.0,1.0,1.0)])
+	lines3D([    0.0,      0.0],[ylim[1],ylim[end]],[    0.0,      0.0],color=[RGB(1.0,1.0,1.0)])
+	lines3D([    0.0,      0.0],[    0.0,      0.0],[zlim[1],zlim[end]],color=[RGB(1.0,1.0,1.0)])
 	return(nothing)
 end
 coordSys3D()=coordSys3D([0.0,1.0],[0.0,1.0],[0.0,1.0])

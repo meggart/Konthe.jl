@@ -1,3 +1,4 @@
+# collection of missing OpenGL functions. Should be fixed soon in OpenGL.jl
 using GetC
 import GetC.@getCFun
 @getCFun "libGL" glCheckFramebufferStatusEXT glCheckFramebufferStatusEXT(e::GLenum)::GLenum;

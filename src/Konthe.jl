@@ -1,7 +1,7 @@
 push!(DL_LOAD_PATH,"/opt/ImageMagick/lib")
 push!(DL_LOAD_PATH,"/opt/local/lib");
 global OpenGLver="1.0"
-module glPlot
+module Konthe
 using Images
 
 using OpenGL
@@ -101,7 +101,7 @@ end
 function plot3D() 
 	global gfb
 	global gy
-	gfb == nothing ? glNew(width,height) : nothing 
+	gfb == nothing ? newPlot3D(width,height) : nothing 
 	if gy==nothing
 		gy = Image(zeros(Uint8,3,width,height),["limits"=>(0x00,0xff),"colordim"=>1,"spatialorder"=>["x","y"],"colorspace"=>"RGB"])
 	end
@@ -110,7 +110,7 @@ end
 
 export plot3D
 
-function glNew(w::Integer=800,h::Integer=600)
+function newPlot3D(w::Integer=800,h::Integer=600)
 
 	global gfb 
 	global width
@@ -140,7 +140,7 @@ function glNew(w::Integer=800,h::Integer=600)
 	height = h
 	return nothing
 end
-export glNew
+export newPlot3D
 
 initGL()
 gfb = makeFrameBuffer(800, 600)
