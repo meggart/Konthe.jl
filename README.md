@@ -47,3 +47,15 @@ disbales lighting.
 	setLightDirection(x,y,z)
 
 sets the direction of the light source. 
+
+Examples:
+
+![Fig1](https://github.com/meggart/Konthe/examples/fig1.png)
+
+![Fig2](https://github.com/meggart/Konthe/examples/fig2.png)
+
+![Fig3](https://github.com/meggart/Konthe/examples/fig3.png)
+
+![Fig4](https://github.com/meggart/Konthe/examples/fig4.png)
+
+![Fig5](https://github.com/meggart/Konthe/examples/fig5.png)
