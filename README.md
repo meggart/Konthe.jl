@@ -1,12 +1,12 @@
 # Konthe
 
-[![Build Status](https://travis-ci.org/meggart/glPlot.jl.png)](https://travis-ci.org/meggart/glPlot.jl)
+Collection of convenience function for plotting using the OpenGL package.
 
 Have a look at an exammple notebook:
 
 [Example notebook](https://rawgithub.com/meggart/Konthe/master/examples/KontheExamples.html)
 
-Collection of convenience function for plotting using the OpenGL package. Here is a list of exported functions:
+Here is a list of exported functions:
 
     newPlot3D(width=800, height=600)
 
@@ -63,3 +63,5 @@ Examples:
 ![Fig4](https://github.com/meggart/Konthe/blob/master/examples/fig4.png?raw=true)
 
 ![Fig5](https://github.com/meggart/Konthe/blob/master/examples/fig5.png?raw=true)
+
+[![Build Status](https://travis-ci.org/meggart/glPlot.jl.png)](https://travis-ci.org/meggart/glPlot.jl)
