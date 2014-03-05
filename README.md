@@ -52,7 +52,7 @@ Examples:
 
 See example notebook:
 
-[Example](https://github.com/meggart/Konthe/blob/master/examples/KontheExamples.html?raw=true)
+[Example](https://github.com/meggart/Konthe/blob/master/examples/KontheExamples.html)
 
 ![Fig1](https://github.com/meggart/Konthe/blob/master/examples/fig1.png?raw=true)
 
