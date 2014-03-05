@@ -50,6 +50,10 @@ sets the direction of the light source.
 
 Examples:
 
+See example notebook:
+
+[Example](https://github.com/meggart/Konthe/blob/master/examples/KontheExamples.html?raw=true)
+
 ![Fig1](https://github.com/meggart/Konthe/blob/master/examples/fig1.png?raw=true)
 
 ![Fig2](https://github.com/meggart/Konthe/blob/master/examples/fig2.png?raw=true)
