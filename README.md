@@ -1,4 +1,4 @@
-# Konthe
+# Konthe.jl
 
 Collection of convenience function for plotting using the OpenGL package. This package is desinged for creating non-interactive graphics, that can be saved to files. Every plot command will not plot to a window but return an Image object that can be saved to a file, viewed in an IJulia notebook or using ImageView.
 
