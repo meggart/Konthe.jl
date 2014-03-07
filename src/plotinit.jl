@@ -77,6 +77,16 @@ immutable SphereContainer
 	predefs::Array{Expr,1}
 end
 
+immutable CylinderContainer
+	coords::(Float64,Float64,Float64)
+	colors::RGB
+	r1::Float64
+	r2::Float64
+	h::Float64
+	slices::Int64
+	stacks::Int64
+	predefs::Array{Expr,1}
+end
 
 function setRotate(a1,a2,a3) 
   global xrot=a1
@@ -93,6 +103,7 @@ pointsList=Array(VertexContainer,0)
 linesList=Array(VertexContainer,0)
 quadsList=Array(VertexContainer,0)
 sphereList=Array(SphereContainer,0)
+cylinderList=Array(CylinderContainer,0)
 qobj = gluNewQuadric()
 gluQuadricDrawStyle(qobj, GLU_FILL)
 gluQuadricNormals(qobj, GLU_SMOOTH)
@@ -102,9 +113,9 @@ bgcur=RGB(0.0,0.0,0.0)
 zrot=45.0
 yrot=0.0
 xrot=45.0
-_xlim=[-2.0,2.0]
-_ylim=[-2.0,2.0]
-_zlim=[-2.0,2.0]
+_xlim=[-1.0,1.0]
+_ylim=[-1.0,1.0]
+_zlim=[-1.0,1.0]
 
 
 width=800

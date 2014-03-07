@@ -68,20 +68,41 @@ export surf3D
 
 function sphere3D(x,y,z,r;
 	filled=true,
-	color=ccur,slices=20,stacks=20)
+	color=ccur,slices=30,stacks=30)
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
 	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef))
 	return(nothing)
 end	
 export sphere3D
 
+function cylinder3D(x1,y1,z1,r1,x2,y2,z2,r2;
+	filled=true,
+	color=ccur,slices=30,stacks=30)
+	#Determine height
+	h = sqrt((x1-x2)^2+(y1-y2)^2+(z1-z2)^2)
+	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
+	#Check if rotation is necessary
+	dxy=sqrt((y1-y2)^2+(x1-x2)^2)
+	if dxy > 0
+		n = ((y1-y2)/dxy,(x2-x1)/dxy,0.0)
+		phi = acosd((z2-z1)/h)
+		push!(predef,:(glRotate($phi,$(n[1]),$(n[2]),0.0)))
+	end	
+	push!(cylinderList,CylinderContainer((x1,y1,z1),color,r1,r2,h,slices,stacks,predef))
+	return(nothing)
+end
+export cylinder3D
+
 function coordSys3D(xlim,ylim,zlim)
 	lines3D([xlim[1],xlim[end]],[    0.0,      0.0],[    0.0,      0.0],color=[RGB(1.0,1.0,1.0)])
 	lines3D([    0.0,      0.0],[ylim[1],ylim[end]],[    0.0,      0.0],color=[RGB(1.0,1.0,1.0)])
 	lines3D([    0.0,      0.0],[    0.0,      0.0],[zlim[1],zlim[end]],color=[RGB(1.0,1.0,1.0)])
+	cylinder3D(0.0,0.0,zlim[1]+0.92*(zlim[end]-zlim[1]),0.04,0.0,0.0,zlim[1]+1.1*(zlim[end]-zlim[1]),0.0,color=RGB(1.0,1.0,1.0))
+	cylinder3D(0.0,ylim[1]+0.92*(ylim[end]-ylim[1]),0.0,0.04,0.0,ylim[1]+1.1*(ylim[end]-ylim[1]),0.0,0.0,color=RGB(1.0,1.0,1.0))
+	cylinder3D(xlim[1]+0.92*(xlim[end]-xlim[1]),0.0,0.0,0.04,xlim[1]+1.1*(xlim[end]-xlim[1]),0.0,0.0,0.0,color=RGB(1.0,1.0,1.0))
 	return(nothing)
 end
-coordSys3D()=coordSys3D([0.0,1.0],[0.0,1.0],[0.0,1.0])
+coordSys3D()=coordSys3D([0.0,_xlim[2]],[0.0,_ylim[2]],[0.0,_zlim[2]])
 export coordSys3D
 
 
@@ -160,6 +181,26 @@ function renderSpheres(l::Array{SphereContainer,1})
 		
 		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
   		gluSphere(qobj,l[i].r,l[i].slices,l[i].stacks)
+		glLoadIdentity()
+  	end
+    end
+end
+
+function renderCylinders(l::Array{CylinderContainer,1})
+    na=length(l)
+    if na > 0
+  	for i=1:na
+		if lighted
+			glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,float32([l[i].colors.r,l[i].colors.g,l[i].colors.b,1.0]))
+		else
+			glColor(l[i].colors)
+		end
+		
+		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
+  		for e in l[i].predefs
+  			eval(e)
+  		end
+		gluCylinder(qobj,l[i].r1,l[i].r2,l[i].h,l[i].slices,l[i].stacks)
 		glLoadIdentity()
   	end
     end

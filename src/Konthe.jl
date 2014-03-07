@@ -76,11 +76,13 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	
-	glOrtho(_xlim[1]*fb.width/fb.height,_xlim[2]*fb.width/fb.height,_ylim[1],_ylim[2],_zlim[1],_zlim[2])
+	glOrtho(-fb.width/fb.height,fb.width/fb.height,-1.0,1.0,-1.0,1.0)
 	
 	glRotate(xrot,1.0,0.0,0.0)
 	glRotate(yrot,0.0,1.0,0.0)
 	glRotate(zrot,0.0,0.0,1.0)
+	
+	glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -92,6 +94,7 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	renderVertexList(quadsList,(:GL_QUADS))
 	
 	renderSpheres(sphereList)
+	renderCylinders(cylinderList)
 	
 	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT)
 	glReadPixels(0, 0, fb.width, fb.height, GL_RGB, GL_UNSIGNED_BYTE, y.data);
@@ -120,6 +123,7 @@ function newPlot3D(w::Integer=800,h::Integer=600)
 	empty!(linesList)
 	empty!(quadsList)
 	empty!(sphereList)
+	empty!(cylinderList)
 
 	ccur=RGB(1.0,1.0,1.0)
 	bgcur=RGB(0.0,0.0,0.0)
