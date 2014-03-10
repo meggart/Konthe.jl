@@ -3,7 +3,7 @@ OpenGL.glVertex(c::Coord)=glVertex(c.x,c.y,c.z)
 
 function points3D{T}(x::Array{T,1}, y::Array{T,1}, z::Array{T,1};
 	ps=2.0,
-	color::Array{RGB,1}=[ccur], xn::Array{T,1}=Array(Float64,0), yn::Array{T,1}=Array(Float64,0), zn::Array{T,1}=Array(Float64,0))
+	color::Array{RGB,1}=ccur, xn::Array{T,1}=Array(Float64,0), yn::Array{T,1}=Array(Float64,0), zn::Array{T,1}=Array(Float64,0))
 	length(x)==length(y)==length(z) ? nothing : error("Number of Coordinates must match")
 	colinc  = length(color) == 1 ? length(x)+1 : 1
 	norminc = length(x)+1
