@@ -18,7 +18,7 @@ function initGL()
 	glutInitWindowSize(1, 1)
 	glutInitWindowPosition(0, 0)
 	
-	window = glutCreateWindow("NeHe Tut 1")
+	window = glutCreateWindow("Konthe dummy window")
 	glutHideWindow();
 		
 end
@@ -65,7 +65,8 @@ end
 export makeFrameBuffer
 
 function plot3D(y::Image,fb::glFrameBuffer)
-	glClearColor(bgcur.r, bgcur.g, bgcur.b, 1.0)
+
+	glClearColor(float32(bgcur[1].r), float32(bgcur[1].g), float32(bgcur[1].b), float32(1.0))
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -125,8 +126,8 @@ function newPlot3D(w::Integer=800,h::Integer=600)
 	empty!(sphereList)
 	empty!(cylinderList)
 
-	ccur=RGB(1.0,1.0,1.0)
-	bgcur=RGB(0.0,0.0,0.0)
+	ccur[1]=RGB(1.0,1.0,1.0)
+	bgcur[1]=RGB(0.0,0.0,0.0)
 	
 	if gfb!=nothing
 		if (gfb.width==w) && (gfb.height==h)

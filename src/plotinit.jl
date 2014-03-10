@@ -108,8 +108,8 @@ qobj = gluNewQuadric()
 gluQuadricDrawStyle(qobj, GLU_FILL)
 gluQuadricNormals(qobj, GLU_SMOOTH)
 
-ccur=RGB(1.0,1.0,1.0)
-bgcur=RGB(0.0,0.0,0.0)
+ccur=[RGB(1.0,1.0,1.0)]
+bgcur=[RGB(0.0,0.0,0.0)]
 zrot=45.0
 yrot=0.0
 xrot=45.0
@@ -117,6 +117,17 @@ _xlim=[-1.0,1.0]
 _ylim=[-1.0,1.0]
 _zlim=[-1.0,1.0]
 
+function setBox(x1,x2,y1,y2,z1,z2)
+	_xlim[1]=x1
+	_xlim[2]=x2
+	_ylim[1]=y1
+	_ylim[2]=y2
+	_zlim[1]=-z2
+	_zlim[2]=-z1
+end
+export setBox
+setbg(c::RGB)=bgcur[1]=c
+export setbg
 
 width=800
 height=600
@@ -166,7 +177,7 @@ function nnMeanNormal{T1<:SurfArray,T2,T3}(v::VertexContainer{T1,T2,T3},i::Integ
 		dzy= v.coords[1][x,y+1]-v.coords[1][x,y-1]
 	end
 	no = sqrt(dy*dy*dzx*dzx + dx*dx*dzy*dzy + dx*dx*dy*dy)
-	return (dy*dzx/no,dx*dzy/no,-dx*dy/no)
+	return (-dy*dzx/no,-dx*dzy/no,dx*dy/no)
 end
 
 function nnMeanNormal{T1<:ParametricSurface,T2,T3}(v::VertexContainer{T1,T2,T3},i::Integer)

@@ -15,7 +15,7 @@ export points3D
 
 function lines3D{T}(x::Array{T,1},y::Array{T,1},z::Array{T,1};
 	lw=2.0,
-	color::Array{RGB,1}=[ccur],xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0))
+	color::Array{RGB,1}=ccur,xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0))
 	length(x)==length(y)==length(z) ? nothing : error("Number of Coordinates must match")
 	colinc  = length(color) == 1 ? length(x)+1 : 1
 	norminc = length(x)+1
@@ -27,7 +27,7 @@ export lines3D
 
 function quads3D{T}(x::Array{T,1},y::Array{T,1},z::Array{T,1};
 	filled::Bool=true,
-	color=[ccur],xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0),
+	color=ccur,xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0),
 	colinc::Int64=-1,norminc::Int64=-1)
 	length(x)==length(y)==length(z) ? nothing : error("Number of Coordinates must match")
 	length(xn)==length(yn)==length(zn) ? nothing : error("Number of Normals must match")
@@ -68,7 +68,7 @@ export surf3D
 
 function sphere3D(x,y,z,r;
 	filled=true,
-	color=ccur,slices=30,stacks=30)
+	color=ccur[1],slices=30,stacks=30)
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
 	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef))
 	return(nothing)
@@ -77,7 +77,7 @@ export sphere3D
 
 function cylinder3D(x1,y1,z1,r1,x2,y2,z2,r2;
 	filled=true,
-	color=ccur,slices=30,stacks=30)
+	color=ccur[1],slices=30,stacks=30)
 	#Determine height
 	h = sqrt((x1-x2)^2+(y1-y2)^2+(z1-z2)^2)
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
