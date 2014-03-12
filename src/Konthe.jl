@@ -32,6 +32,16 @@ type glFrameBuffer
 	height::Integer
 end
 
+type Perspective
+	camPosPhi::Float64
+	camPosTheta::Float64
+	camDirPhi::Float64
+	camDirTheta::Float64
+	camDist::Float64
+	NearPlaneDist::Float64
+	FarPlaneDist::Float64
+	fovy::Float64
+end
 
 immutable Coord
 	x::Float64
@@ -77,17 +87,19 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	
-	glOrtho(-fb.width/fb.height,fb.width/fb.height,-1.0,1.0,-1.0,1.0)
-	
+	#glOrtho(-fb.width/fb.height,fb.width/fb.height,-1.0,1.0,-1.0,1.0)
+	gluPerspective(45.0,fb.width/fb.height,0.1,100.0)
 	glRotate(xrot,1.0,0.0,0.0)
 	glRotate(yrot,0.0,1.0,0.0)
 	glRotate(zrot,0.0,0.0,1.0)
 	
-	glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
+	#glTranslate(0.0,0.0,-50.0)
+	#glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
+	glTranslate(0.0,0.0,-10.0)
 	setLights();
 	
 	renderVertexList(pointsList,(:GL_POINTS))

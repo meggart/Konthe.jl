@@ -181,7 +181,7 @@ function renderSpheres(l::Array{SphereContainer,1})
 		
 		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
   		gluSphere(qobj,l[i].r,l[i].slices,l[i].stacks)
-		glLoadIdentity()
+		glTranslate(-l[i].coords[1],-l[i].coords[2],-l[i].coords[3])
   	end
     end
 end
@@ -195,13 +195,13 @@ function renderCylinders(l::Array{CylinderContainer,1})
 		else
 			glColor(l[i].colors)
 		end
-		
+		glPushMatrix()
 		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
   		for e in l[i].predefs
   			eval(e)
   		end
 		gluCylinder(qobj,l[i].r1,l[i].r2,l[i].h,l[i].slices,l[i].stacks)
-		glLoadIdentity()
+		glPopMatrix()
   	end
     end
 end
