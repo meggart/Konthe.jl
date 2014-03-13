@@ -4,6 +4,7 @@ lightSpecular= float32([1.0, 1.0, 1.0, 1.0])
 lightPosition= float32([1.0, 0.0, 1.0, 0.0])
 shininess    = float32(50.0)
 
+
 function setLights()
 	if lighted
 		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient)
