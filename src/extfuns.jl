@@ -9,6 +9,7 @@ import GetC.@getCFun
 @getCFun "libGL" glRenderbufferStorageEXT glRenderbufferStorageEXT(target::GLenum,internalFormat::GLenum,width::GLsizei,height::GLsizei)::Void
 @getCFun "libGL" glFramebufferRenderbufferEXT glFramebufferRenderbufferEXT(a1::GLenum, a2::GLenum, a3::GLenum, rb::GLuint)::Void;
 @getCFun "libGLU" gluQuadricDrawStyle gluQuadricDrawStyle(quad::Ptr{Void},style::GLenum)::Void
+@getCFun "libGLU" gluQuadricOrientation gluQuadricOrientation(quad::Ptr{Void},orient::GLenum)::Void
 
 GL_FRAMEBUFFER_EXT =0x8D40
 GL_DRAW_FRAMEBUFFER_EXT=0x8CA9

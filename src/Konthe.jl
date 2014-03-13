@@ -32,16 +32,6 @@ type glFrameBuffer
 	height::Integer
 end
 
-type Perspective
-	camPosPhi::Float64
-	camPosTheta::Float64
-	camDirPhi::Float64
-	camDirTheta::Float64
-	camDist::Float64
-	NearPlaneDist::Float64
-	FarPlaneDist::Float64
-	fovy::Float64
-end
 
 immutable Coord
 	x::Float64
@@ -78,7 +68,6 @@ function plot3D(y::Image,fb::glFrameBuffer)
 
 	glClearColor(float32(bgcur[1].r), float32(bgcur[1].g), float32(bgcur[1].b), float32(1.0))
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
 	
@@ -86,20 +75,33 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D)
 	
 	#glOrtho(-fb.width/fb.height,fb.width/fb.height,-1.0,1.0,-1.0,1.0)
-	gluPerspective(45.0,fb.width/fb.height,0.1,100.0)
-	glRotate(xrot,1.0,0.0,0.0)
-	glRotate(yrot,0.0,1.0,0.0)
-	glRotate(zrot,0.0,0.0,1.0)
+	#glRotate(xrot,1.0,0.0,0.0)
+	#glRotate(yrot,0.0,1.0,0.0)
+	#glRotate(zrot,0.0,0.0,1.0)
 	
 	#glTranslate(0.0,0.0,-50.0)
 	#glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
 	
+	setView(perspective,fb.width,fb.height)
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
-	glTranslate(0.0,0.0,-10.0)
+	glDisable(GL_DEPTH_TEST)
+	println(getCamPos(perspective))
+	
+	glDisable(GL_LIGHTING)
+	renderSpheres([SphereContainer(	getCamPos(perspective),
+								 	RGB(0.0,0.0,0.0),50.0,20,20,
+									[:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)),:(gluQuadricOrientation(qobj, GLU_INSIDE)),:(glBindTexture(GL_TEXTURE_2D,tex[1]))],
+									[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))])])
+	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING)
+	
 	setLights();
 	
 	renderVertexList(pointsList,(:GL_POINTS))
@@ -112,6 +114,18 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT)
 	glReadPixels(0, 0, fb.width, fb.height, GL_RGB, GL_UNSIGNED_BYTE, y.data);
 	return(y)
+end
+
+function setView(p::Perspective,width,height)
+	gluPerspective(p.fovy,width/height,p.NearPlaneDist,p.FarPlaneDist)
+	
+	
+	glTranslate(0.0,0.0,-p.camDist)
+	glRotate(p.camPosTheta,1.0,0.0,0.0)
+	glRotate(p.camPosPhi,0.0,0.0,1.0)
+	
+	glTranslate(p.camOffset...)
+	
 end
 
 function plot3D() 

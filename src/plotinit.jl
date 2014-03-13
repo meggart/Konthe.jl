@@ -75,7 +75,9 @@ immutable SphereContainer
 	slices::Int64
 	stacks::Int64
 	predefs::Array{Expr,1}
+	postdef::Array{Expr,1}
 end
+
 
 immutable CylinderContainer
 	coords::(Float64,Float64,Float64)
@@ -107,6 +109,7 @@ cylinderList=Array(CylinderContainer,0)
 qobj = gluNewQuadric()
 gluQuadricDrawStyle(qobj, GLU_FILL)
 gluQuadricNormals(qobj, GLU_SMOOTH)
+gluQuadricTexture(qobj,GL_TRUE); 
 
 ccur=[RGB(1.0,1.0,1.0)]
 bgcur=[RGB(0.0,0.0,0.0)]
@@ -116,6 +119,9 @@ xrot=45.0
 _xlim=[-1.0,1.0]
 _ylim=[-1.0,1.0]
 _zlim=[-1.0,1.0]
+
+#Define global Texture Array
+tex = zeros(Uint32,1)
 
 function setBox(x1,x2,y1,y2,z1,z2)
 	_xlim[1]=x1
@@ -129,8 +135,23 @@ export setBox
 setbg(c::RGB)=bgcur[1]=c
 export setbg
 
+type Perspective
+	camPosPhi::Float64
+	camPosTheta::Float64
+	camOffset::(Float64,Float64,Float64)
+	camDist::Float64
+	NearPlaneDist::Float64
+	FarPlaneDist::Float64
+	fovy::Float64
+end
+perspective=Perspective(0.0,0.0,(0.0,0.0,0.0),40.0,1.0,300.0,45.0)
+getCamPos(p::Perspective)=(	p.camDist*sind(p.camPosTheta)*sind(p.camPosPhi)+p.camOffset[1],
+							p.camDist*sind(p.camPosTheta)*cosd(p.camPosPhi)+p.camOffset[2],
+							p.camDist*cosd(p.camPosTheta)-p.camOffset[3])
+
 width=800
 height=600
+
 
 lighted=true;
 include("light.jl")

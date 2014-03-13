@@ -68,12 +68,28 @@ export surf3D
 
 function sphere3D(x,y,z,r;
 	filled=true,
-	color=ccur[1],slices=30,stacks=30)
-	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE))]
-	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef))
+	color=ccur[1],slices=30,stacks=30, 
+	texture=-1)
+	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)),:(gluQuadricOrientation(qobj,GLU_OUTSIDE))]
+	if texture != -1 
+		push!(predef,:(glBindTexture(GL_TEXTURE_2D,tex[1]))) 
+		postdef=[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))]
+	else
+		postdef=Array(Expr,0)
+	end
+	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef,postdef))
 	return(nothing)
 end	
 export sphere3D
+
+function addTexture(img::Array{Uint8,3})
+	glGenTextures(1,tex)
+	glBindTexture(GL_TEXTURE_2D,tex[1])
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, size(img,2), size(img,3), 0, GL_RGB, GL_UNSIGNED_BYTE, img)
+end
+export addTexture
 
 function cylinder3D(x1,y1,z1,r1,x2,y2,z2,r2;
 	filled=true,
@@ -182,6 +198,9 @@ function renderSpheres(l::Array{SphereContainer,1})
 		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
   		gluSphere(qobj,l[i].r,l[i].slices,l[i].stacks)
 		glTranslate(-l[i].coords[1],-l[i].coords[2],-l[i].coords[3])
+  		for e in l[i].postdef
+  			eval(e)
+  		end
   	end
     end
 end
