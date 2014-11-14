@@ -3,7 +3,7 @@ OpenGL.glVertex(c::Coord)=glVertex(c.x,c.y,c.z)
 
 function points3D{T}(x::Array{T,1}, y::Array{T,1}, z::Array{T,1};
 	ps=2.0,
-	color::Array{RGB,1}=ccur, xn::Array{T,1}=Array(Float64,0), yn::Array{T,1}=Array(Float64,0), zn::Array{T,1}=Array(Float64,0))
+	color::Array=ccur, xn::Array{T,1}=Array(Float64,0), yn::Array{T,1}=Array(Float64,0), zn::Array{T,1}=Array(Float64,0))
 	length(x)==length(y)==length(z) ? nothing : error("Number of Coordinates must match")
 	colinc  = length(color) == 1 ? length(x)+1 : 1
 	norminc = length(x)+1
@@ -15,7 +15,7 @@ export points3D
 
 function lines3D{T}(x::Array{T,1},y::Array{T,1},z::Array{T,1};
 	lw=2.0,
-	color::Array{RGB,1}=ccur,xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0))
+	color::Array=ccur,xn::Array{T,1}=Array(Float64,0),yn::Array{T,1}=Array(Float64,0),zn::Array{T,1}=Array(Float64,0))
 	length(x)==length(y)==length(z) ? nothing : error("Number of Coordinates must match")
 	colinc  = length(color) == 1 ? length(x)+1 : 1
 	norminc = length(x)+1
@@ -69,27 +69,38 @@ export surf3D
 function sphere3D(x,y,z,r;
 	filled=true,
 	color=ccur[1],slices=30,stacks=30, 
-	texture=-1)
+	texture=-1,rotate=(0.0,0.0,0.0,0.0))
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)),:(gluQuadricOrientation(qobj,GLU_OUTSIDE))]
-	if texture != -1 
-		push!(predef,:(glBindTexture(GL_TEXTURE_2D,tex[1]))) 
-		postdef=[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))]
-	else
-		postdef=Array(Expr,0)
-	end
+	rotex=quote
+    glPushMatrix()
+    glRotate($(rotate[1]),$(rotate[2]),$(rotate[3]),$(rotate[4]))
+    end
+    push!(predef,rotex)
+    #if texture != -1 
+	#	push!(predef,:(glBindTexture(GL_TEXTURE_2D,tex[1]))) 
+#		postdef=[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))]
+#	else
+		postdef=[:(glPopMatrix())]
+#	end
 	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef,postdef))
 	return(nothing)
 end	
 export sphere3D
 
-function addTexture(img::Array{Uint8,3})
-	glGenTextures(1,tex)
-	glBindTexture(GL_TEXTURE_2D,tex[1])
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, size(img,2), size(img,3), 0, GL_RGB, GL_UNSIGNED_BYTE, img)
+function addTexture(img)
+    if tex[1]==0
+        println("Initializing texture")
+	    glGenTextures(1,tex)
+	    glBindTexture(GL_TEXTURE_2D,tex[1])
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    else
+        println("Renewing texture")
+    end
+	    glTexImage2D(GL_TEXTURE_2D, 0, 3, size(img,2), size(img,3), 0, GL_RGB, GL_UNSIGNED_BYTE, img)
 end
 export addTexture
+
 
 function cylinder3D(x1,y1,z1,r1,x2,y2,z2,r2;
 	filled=true,

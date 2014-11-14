@@ -1,14 +1,16 @@
 push!(DL_LOAD_PATH,"/opt/ImageMagick/lib")
 push!(DL_LOAD_PATH,"/opt/local/lib");
-global OpenGLver="1.0"
 module Konthe
 using Images
 
 using OpenGL
-using OpenGLStd
+@OpenGL.version "1.0"
+@OpenGL.load
+using OpenGL.OpenGLStd
 using GLUT
-using GLU
+using OpenGL.GLU
 using Color
+using FixedPointNumbers
 include("extfuns.jl")
 
 function initGL()
@@ -82,7 +84,7 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	#glRotate(yrot,0.0,1.0,0.0)
 	#glRotate(zrot,0.0,0.0,1.0)
 	
-	#glTranslate(0.0,0.0,-50.0)
+	#glTranslate(0.0,0.0,-10.0)
 	#glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
 	
 	setView(perspective,fb.width,fb.height)
@@ -94,10 +96,10 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	println(getCamPos(perspective))
 	
 	glDisable(GL_LIGHTING)
-	renderSpheres([SphereContainer(	getCamPos(perspective),
-								 	RGB(0.0,0.0,0.0),50.0,20,20,
-									[:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)),:(gluQuadricOrientation(qobj, GLU_INSIDE)),:(glBindTexture(GL_TEXTURE_2D,tex[1]))],
-									[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))])])
+	#renderSpheres([SphereContainer(	getCamPos(perspective),
+	#							 	RGB(0.0,0.0,0.0),50.0,20,20,
+	#								[:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)),:(gluQuadricOrientation(qobj, GLU_INSIDE)),:(glBindTexture(GL_TEXTURE_2D,tex[1]))],
+	#								[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))])])
 	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING)
@@ -133,7 +135,7 @@ function plot3D()
 	global gy
 	gfb == nothing ? newPlot3D(width,height) : nothing 
 	if gy==nothing
-		gy = Image(zeros(Uint8,3,width,height),["limits"=>(0x00,0xff),"colordim"=>1,"spatialorder"=>["x","y"],"colorspace"=>"RGB"])
+		gy = Image(Array(RGB{Ufixed8},width,height),["limits"=>(0x00,0xff),"spatialorder"=>["x","y"]])
 	end
 	plot3D(gy,gfb)
 end

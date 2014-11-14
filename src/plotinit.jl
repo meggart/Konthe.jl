@@ -23,10 +23,10 @@ end
 VertexContainer(coords,normals,colors,norminc,colinc)=VertexContainer(coords,normals,colors,norminc,colinc,Array(Expr,0))
 getCoord{T1<:XYZVecTuple,T2,T3}(v::VertexContainer{T1,T2,T3},i::Integer)=(v.coords[1][i],v.coords[2][i],v.coords[3][i])
 getNormal{T1,T2<:XYZVecTuple,T3}(v::VertexContainer{T1,T2,T3},i::Integer)=(v.normals[1][i],v.normals[2][i],v.normals[3][i])
-getColor{T1,T2,T3<:Array{RGB,1}}(v::VertexContainer{T1,T2,T3},i::Integer)=v.colors[i]
+getColor{T1,T2,T3<:Array}(v::VertexContainer{T1,T2,T3},i::Integer)=v.colors[i]
 getNCoord{T1<:XYZVecTuple,T2,T3}(v::VertexContainer{T1,T2,T3})=length(v.coords[1])
 getNNormal{T1,T2<:XYZVecTuple,T3}(v::VertexContainer{T1,T2,T3})=length(v.normals[1])
-getNColor{T1,T2,T3<:Array{RGB,1}}(v::VertexContainer{T1,T2,T3})=length(v.colors)
+getNColor{T1,T2,T3<:Array}(v::VertexContainer{T1,T2,T3})=length(v.colors)
 getNCoord{T1<:SurfArray,T2,T3}(v::VertexContainer{T1,T2,T3})=4*(length(v.coords[2])-1)*(length(v.coords[3])-1)
 getNColor{T1,T2,T3<:Function}(v::VertexContainer{T1,T2,T3})=getNCoord(v)
 getNNormal{T1,T2<:Function,T3}(v::VertexContainer{T1,T2,T3})=getNCoord(v)
