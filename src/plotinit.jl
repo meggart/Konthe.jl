@@ -122,6 +122,7 @@ _zlim=[-1.0,1.0]
 
 #Define global Texture Array
 tex = zeros(Uint32,1)
+imageList=Dict{Int,Array{Uint8,3}}()
 
 function setBox(x1,x2,y1,y2,z1,z2)
 	_xlim[1]=x1
@@ -149,8 +150,8 @@ getCamPos(p::Perspective)=(	p.camDist*sind(p.camPosTheta)*sind(p.camPosPhi)+p.ca
 							p.camDist*sind(p.camPosTheta)*cosd(p.camPosPhi)+p.camOffset[2],
 							p.camDist*cosd(p.camPosTheta)-p.camOffset[3])
 
-width=800
-height=600
+width=1600
+height=1200
 
 
 lighted=true;

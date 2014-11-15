@@ -72,22 +72,21 @@ function sphere3D(x,y,z,r;
 	texture=-1,rotate=(0.0,0.0,0.0,0.0))
 	predef = filled ? [:(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL))] : [:(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)),:(gluQuadricOrientation(qobj,GLU_OUTSIDE))]
 	rotex=quote
-    glPushMatrix()
     glRotate($(rotate[1]),$(rotate[2]),$(rotate[3]),$(rotate[4]))
     end
     push!(predef,rotex)
-    #if texture != -1 
-	#	push!(predef,:(glBindTexture(GL_TEXTURE_2D,tex[1]))) 
-#		postdef=[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))]
-#	else
-		postdef=[:(glPopMatrix())]
-#	end
+    if texture != -1 
+		push!(predef,:(glBindTexture(GL_TEXTURE_2D,tex[1]);glTexImage2D(GL_TEXTURE_2D, 0, 3, size(imageList[$(texture)],2), size(imageList[$(texture)],3), 0, GL_RGB, GL_UNSIGNED_BYTE, imageList[$(texture)]))) 
+		postdef=[:(glBindTexture(GL_TEXTURE_2D,uint32(0)))]
+	else
+		postdef=Expr[]
+	end
 	push!(sphereList,SphereContainer((x,y,z),color,r,slices,stacks,predef,postdef))
 	return(nothing)
 end	
 export sphere3D
 
-function addTexture(img)
+function addTexture(img,i)
     if tex[1]==0
         println("Initializing texture")
 	    glGenTextures(1,tex)
@@ -97,7 +96,7 @@ function addTexture(img)
     else
         println("Renewing texture")
     end
-	    glTexImage2D(GL_TEXTURE_2D, 0, 3, size(img,2), size(img,3), 0, GL_RGB, GL_UNSIGNED_BYTE, img)
+    imageList[i]=img
 end
 export addTexture
 
@@ -197,7 +196,10 @@ function renderSpheres(l::Array{SphereContainer,1})
     na=length(l)
     if na > 0
   	for i=1:na
-  		for e in l[i].predefs
+  		
+        glPushMatrix()
+        glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
+        for e in l[i].predefs
   			eval(e)
   		end
 		if lighted
@@ -205,13 +207,11 @@ function renderSpheres(l::Array{SphereContainer,1})
 		else
 			glColor(l[i].colors)
 		end
-		
-		glTranslate(l[i].coords[1],l[i].coords[2],l[i].coords[3])
   		gluSphere(qobj,l[i].r,l[i].slices,l[i].stacks)
-		glTranslate(-l[i].coords[1],-l[i].coords[2],-l[i].coords[3])
   		for e in l[i].postdef
   			eval(e)
   		end
+        glPopMatrix()
   	end
     end
 end

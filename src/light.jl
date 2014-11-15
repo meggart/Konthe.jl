@@ -2,7 +2,7 @@ lightAmbient = float32([0.2, 0.2, 0.2, 1.0])
 lightDiffuse = float32([0.5, 0.5, 0.5, 1.0])
 lightSpecular= float32([1.0, 1.0, 1.0, 1.0])
 lightPosition= float32([1.0, 0.0, 1.0, 0.0])
-shininess    = float32(50.0)
+shininess    = float32(5.0)
 
 
 function setLights()

@@ -86,10 +86,11 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	
 	#glTranslate(0.0,0.0,-10.0)
 	#glOrtho(_xlim[1],_xlim[2],_ylim[1],_ylim[2],_zlim[2],_zlim[1])
-	
+	setLights();
+    
 	setView(perspective,fb.width,fb.height)
-	
-	glMatrixMode(GL_MODELVIEW);
+    
+    glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
 	glDisable(GL_DEPTH_TEST)
@@ -104,7 +105,6 @@ function plot3D(y::Image,fb::glFrameBuffer)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING)
 	
-	setLights();
 	
 	renderVertexList(pointsList,(:GL_POINTS))
 	renderVertexList(linesList,(:GL_LINE_STRIP))
@@ -142,7 +142,7 @@ end
 
 export plot3D
 
-function newPlot3D(w::Integer=800,h::Integer=600)
+function newPlot3D(w::Integer=1600,h::Integer=1200)
 
 	global gfb 
 	global width
@@ -176,6 +176,6 @@ end
 export newPlot3D
 
 initGL()
-gfb = makeFrameBuffer(800, 600)
+gfb = makeFrameBuffer(1600, 1200)
 gy  = nothing
 end
